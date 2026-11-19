@@ -5,7 +5,7 @@ interface payloadType {
   uid: string;
   em: string;
   r: string;
-  sid: string;
+  sid?: string | null;
 }
 interface Props {
   payload: payloadType;

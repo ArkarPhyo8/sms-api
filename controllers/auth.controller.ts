@@ -100,7 +100,7 @@ export const login = async (req: Request, res: Response) => {
       uid: user.id,
       em: user.email,
       r: user.role,
-      sid: user.schoolId,
+      sid: user?.schoolId,
     };
     const token = generateToken({ payload });
 

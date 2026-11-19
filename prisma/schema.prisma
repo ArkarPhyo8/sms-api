@@ -12,7 +12,7 @@ datasource db {
 }
 
 // ==========================================
-// 1. ENUMS & CONSTANTS
+// ENUMS & CONSTANTS
 // ==========================================
 
 enum Role {
@@ -46,7 +46,7 @@ enum FeeStatus {
 }
 
 // ==========================================
-// 2. CORE & AUTHENTICATION MODELS
+// CORE & AUTHENTICATION MODELS
 // ==========================================
 
 model RefreshToken {
@@ -88,8 +88,8 @@ model School {
 
 model User {
   id           String    @id @default(uuid())
-  schoolId     String
-  school       School    @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  schoolId     String?
+  school       School?   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   email        String    @unique
   passwordHash String
   role         Role
@@ -114,7 +114,7 @@ model User {
 }
 
 // ==========================================
-// 3. ACADEMIC STRUCTURE
+// ACADEMIC STRUCTURE
 // ==========================================
 
 model AcademicYear {
@@ -207,7 +207,7 @@ model Subject {
 }
 
 // ==========================================
-// 4. USERS PROFILES (STUDENTS, TEACHERS, PARENTS)
+// USERS PROFILES (STUDENTS, TEACHERS, PARENTS)
 // ==========================================
 
 model Student {
@@ -216,7 +216,7 @@ model Student {
   school          School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   userId          String   @unique
   user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  admissionNumber String   @unique
+  admissionNumber String
   rollNumber      String?
   dateOfBirth     DateTime
   gender          Gender
@@ -235,6 +235,7 @@ model Student {
   bookIssues  BookIssue[]
 
   @@index([schoolId])
+  @@unique([schoolId, admissionNumber])
   @@map("students")
 }
 
@@ -244,7 +245,7 @@ model Teacher {
   school        School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   userId        String   @unique
   user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  employeeId    String   @unique
+  employeeId    String
   qualification String?
   joiningDate   DateTime
   createdAt     DateTime @default(now())
@@ -257,6 +258,7 @@ model Teacher {
   attendances     Attendance[]     @relation("TakenByTeacher")
 
   @@index([schoolId])
+  @@unique([schoolId, employeeId])
   @@map("teachers")
 }
 
@@ -316,7 +318,7 @@ model TeacherSubject {
 }
 
 // ==========================================
-// 5. ACADEMIC OPERATIONS (TIMETABLE, ATTENDANCE, EXAMS)
+// ACADEMIC OPERATIONS (TIMETABLE, ATTENDANCE, EXAMS)
 // ==========================================
 
 model Timetable {
@@ -385,7 +387,7 @@ model ExamResult {
 }
 
 // ==========================================
-// 6. FINANCE & FEES MANAGEMENT
+// FINANCE & FEES MANAGEMENT
 // ==========================================
 
 model FeeStructure {
@@ -422,7 +424,7 @@ model FeePayment {
 }
 
 // ==========================================
-// 7. LIBRARY MANAGEMENT SYSTEM
+// LIBRARY MANAGEMENT SYSTEM
 // ==========================================
 
 model Book {
